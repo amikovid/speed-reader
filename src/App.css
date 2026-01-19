@@ -1,3 +1,7 @@
+/* ═══════════════════════════════════════════════════════════════
+   THE SCRIBE'S FOLIO - A Medieval Manuscript Speed Reader
+   ═══════════════════════════════════════════════════════════════ */
+
 /* Global Styles */
 * {
   margin: 0;
@@ -6,50 +10,135 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'IM Fell English', 'Libre Baskerville', Georgia, serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 .app {
   min-height: 100vh;
-  background: #0a0a0a;
-  color: #ffffff;
+  background:
+    /* Noise/grain texture overlay */
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"),
+    /* Parchment gradient */
+    radial-gradient(ellipse at center, #F4EBD0 0%, #E8DCC0 50%, #D4C4A8 100%);
+  background-blend-mode: multiply;
+  background-attachment: fixed;
+  color: #2C2421;
+  position: relative;
 }
 
-/* Welcome Screen */
+/* Heavy vignette effect - candlelit edges */
+.app::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 0%,
+    transparent 40%,
+    rgba(44, 36, 33, 0.15) 70%,
+    rgba(44, 36, 33, 0.35) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Aged paper stains */
+.app::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    radial-gradient(ellipse at 20% 30%, rgba(139, 69, 19, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(139, 0, 0, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(101, 67, 33, 0.05) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   WELCOME SCREEN - The Folio's Cover
+   ═══════════════════════════════════════════════════════════════ */
+
 .welcome-screen {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
   padding: 2rem;
+  position: relative;
+  z-index: 2;
 }
 
 .welcome-content {
   text-align: center;
-  max-width: 600px;
+  max-width: 650px;
+  background: rgba(244, 235, 208, 0.85);
+  padding: 4rem 3rem;
+  border-radius: 4px;
+  position: relative;
+  box-shadow:
+    0 10px 40px rgba(44, 36, 33, 0.4),
+    inset 0 0 60px rgba(139, 0, 0, 0.03);
+  border: 3px double #654321;
+}
+
+/* Decorative corner flourishes */
+.welcome-content::before,
+.welcome-content::after {
+  content: '❦';
+  position: absolute;
+  font-size: 2rem;
+  color: #8B0000;
+  opacity: 0.6;
+}
+
+.welcome-content::before {
+  top: 1rem;
+  left: 1.5rem;
+}
+
+.welcome-content::after {
+  bottom: 1rem;
+  right: 1.5rem;
+  transform: rotate(180deg);
 }
 
 .app-title {
-  font-size: 3.5rem;
+  font-family: 'UnifrakturMaguntia', 'Cinzel', serif;
+  font-size: 4rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #8B0000;
+  text-shadow:
+    2px 2px 0px rgba(212, 175, 55, 0.3),
+    4px 4px 8px rgba(44, 36, 33, 0.5);
+  letter-spacing: 0.05em;
+  line-height: 1.2;
 }
 
 .app-subtitle {
-  font-size: 1.25rem;
-  color: #888;
+  font-family: 'IM Fell English', serif;
+  font-size: 1.3rem;
+  color: #654321;
   margin-bottom: 3rem;
-  line-height: 1.6;
+  line-height: 1.8;
+  font-style: italic;
+  font-weight: 400;
 }
 
-/* PDF Uploader */
+/* ═══════════════════════════════════════════════════════════════
+   PDF UPLOADER - Wax Seal Button
+   ═══════════════════════════════════════════════════════════════ */
+
 .pdf-uploader {
   margin-bottom: 3rem;
 }
@@ -57,29 +146,59 @@ body {
 .upload-button {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.75rem;
-  padding: 1rem 2rem;
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #ffffff;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 1.5rem 2.5rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #F4EBD0;
+  background:
+    radial-gradient(circle at 30% 30%, #A52A2A 0%, #8B0000 50%, #6B0000 100%);
   border: none;
-  border-radius: 12px;
+  border-radius: 50%;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  transition: all 0.4s ease;
+  box-shadow:
+    0 8px 20px rgba(139, 0, 0, 0.5),
+    inset 0 -3px 8px rgba(0, 0, 0, 0.4),
+    inset 0 3px 8px rgba(255, 255, 255, 0.15);
+  font-family: 'Cinzel', 'IM Fell English SC', serif;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  position: relative;
+  width: 180px;
+  height: 180px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* Wax seal texture */
+.upload-button::before {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.2) 0%, transparent 60%),
+    radial-gradient(circle at 60% 60%, rgba(0, 0, 0, 0.3) 0%, transparent 60%);
+  pointer-events: none;
 }
 
 .upload-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow:
+    0 12px 30px rgba(139, 0, 0, 0.6),
+    inset 0 -3px 8px rgba(0, 0, 0, 0.4),
+    inset 0 3px 8px rgba(255, 255, 255, 0.2);
 }
 
 .upload-button:active {
-  transform: translateY(0);
+  transform: translateY(-2px) scale(1.02);
 }
 
-/* Features */
+/* ═══════════════════════════════════════════════════════════════
+   FEATURES
+   ═══════════════════════════════════════════════════════════════ */
+
 .features {
   display: flex;
   justify-content: center;
@@ -91,22 +210,33 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  background: #1a1a1a;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  color: #ccc;
+  padding: 1rem 1.75rem;
+  background: rgba(228, 220, 192, 0.7);
+  border-radius: 3px;
+  font-size: 1rem;
+  color: #654321;
+  border: 2px solid rgba(101, 67, 33, 0.3);
+  box-shadow:
+    0 3px 8px rgba(44, 36, 33, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  font-family: 'IM Fell English', serif;
 }
 
 .feature-icon {
   font-size: 1.5rem;
+  filter: sepia(0.6) brightness(0.8);
 }
 
-/* Reader Screen */
+/* ═══════════════════════════════════════════════════════════════
+   READER SCREEN
+   ═══════════════════════════════════════════════════════════════ */
+
 .reader-screen {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  position: relative;
+  z-index: 2;
 }
 
 .reader-header {
@@ -115,28 +245,41 @@ body {
   justify-content: flex-start;
 }
 
+/* New File Button - Leather Patch Style */
 .new-file-btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.625rem 1.25rem;
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: #888;
-  background: transparent;
-  border: 1px solid #333;
-  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #F4EBD0;
+  background:
+    linear-gradient(145deg, #654321 0%, #4A3020 100%);
+  border: 2px solid #8B7355;
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow:
+    0 4px 10px rgba(44, 36, 33, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.15),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+  font-family: 'Cinzel', serif;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .new-file-btn:hover {
-  color: #fff;
-  border-color: #555;
-  background: #1a1a1a;
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 14px rgba(44, 36, 33, 0.5),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Speed Reader */
+/* ═══════════════════════════════════════════════════════════════
+   SPEED READER - The Illuminated Text
+   ═══════════════════════════════════════════════════════════════ */
+
 .speed-reader {
   flex: 1;
   display: flex;
@@ -144,7 +287,6 @@ body {
   padding: 2rem;
 }
 
-/* Reader Display */
 .reader-display {
   flex: 1;
   display: flex;
@@ -154,29 +296,113 @@ body {
   margin-bottom: 3rem;
 }
 
+/* Manuscript page container with deckle edges */
 .word-container {
   width: 100%;
+  max-width: 900px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 4rem 2rem;
+  background: rgba(244, 235, 208, 0.75);
+  position: relative;
+  box-shadow:
+    0 15px 50px rgba(44, 36, 33, 0.35),
+    inset 0 0 80px rgba(139, 0, 0, 0.02);
+  border: 3px double #654321;
+
+  /* Torn paper deckle edge effect */
+  clip-path: polygon(
+    0% 1%, 2% 0%, 4% 1%, 6% 0%, 8% 2%, 10% 1%, 12% 0%, 14% 1%,
+    16% 0%, 18% 2%, 20% 1%, 22% 0%, 24% 1%, 26% 0%, 28% 1%, 30% 0%,
+    32% 1%, 34% 0%, 36% 2%, 38% 1%, 40% 0%, 42% 1%, 44% 0%, 46% 1%,
+    48% 0%, 50% 1%, 52% 0%, 54% 1%, 56% 0%, 58% 1%, 60% 0%, 62% 2%,
+    64% 1%, 66% 0%, 68% 1%, 70% 0%, 72% 1%, 74% 0%, 76% 1%, 78% 0%,
+    80% 1%, 82% 0%, 84% 2%, 86% 1%, 88% 0%, 90% 1%, 92% 0%, 94% 1%,
+    96% 0%, 98% 1%, 100% 0%,
+    100% 2%, 99% 4%, 100% 6%, 99% 8%, 100% 10%, 99% 12%, 100% 14%,
+    99% 16%, 100% 18%, 99% 20%, 100% 22%, 99% 24%, 100% 26%, 99% 28%,
+    100% 30%, 99% 32%, 100% 34%, 99% 36%, 100% 38%, 99% 40%, 100% 42%,
+    99% 44%, 100% 46%, 99% 48%, 100% 50%, 99% 52%, 100% 54%, 99% 56%,
+    100% 58%, 99% 60%, 100% 62%, 99% 64%, 100% 66%, 99% 68%, 100% 70%,
+    99% 72%, 100% 74%, 99% 76%, 100% 78%, 99% 80%, 100% 82%, 99% 84%,
+    100% 86%, 99% 88%, 100% 90%, 99% 92%, 100% 94%, 99% 96%, 100% 98%, 99% 100%,
+    98% 100%, 96% 99%, 94% 100%, 92% 99%, 90% 100%, 88% 99%, 86% 100%,
+    84% 99%, 82% 100%, 80% 99%, 78% 100%, 76% 99%, 74% 100%, 72% 99%,
+    70% 100%, 68% 99%, 66% 100%, 64% 99%, 62% 100%, 60% 99%, 58% 100%,
+    56% 99%, 54% 100%, 52% 99%, 50% 100%, 48% 99%, 46% 100%, 44% 99%,
+    42% 100%, 40% 99%, 38% 100%, 36% 99%, 34% 100%, 32% 99%, 30% 100%,
+    28% 99%, 26% 100%, 24% 99%, 22% 100%, 20% 99%, 18% 100%, 16% 99%,
+    14% 100%, 12% 99%, 10% 100%, 8% 99%, 6% 100%, 4% 99%, 2% 100%, 0% 99%,
+    0% 98%, 1% 96%, 0% 94%, 1% 92%, 0% 90%, 1% 88%, 0% 86%, 1% 84%,
+    0% 82%, 1% 80%, 0% 78%, 1% 76%, 0% 74%, 1% 72%, 0% 70%, 1% 68%,
+    0% 66%, 1% 64%, 0% 62%, 1% 60%, 0% 58%, 1% 56%, 0% 54%, 1% 52%,
+    0% 50%, 1% 48%, 0% 46%, 1% 44%, 0% 42%, 1% 40%, 0% 38%, 1% 36%,
+    0% 34%, 1% 32%, 0% 30%, 1% 28%, 0% 26%, 1% 24%, 0% 22%, 1% 20%,
+    0% 18%, 1% 16%, 0% 14%, 1% 12%, 0% 10%, 1% 8%, 0% 6%, 1% 4%, 0% 2%
+  );
 }
 
+/* The illuminated word - with ink bleed effect */
 .word {
-  font-size: 4rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
+  font-size: 5rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   user-select: none;
+  font-family: 'IM Fell English', Georgia, serif;
+  position: relative;
+  animation: inkBleed 0.15s ease-in;
+}
+
+@keyframes inkBleed {
+  0% {
+    opacity: 0;
+    filter: blur(3px) contrast(1.5);
+    transform: scale(1.05);
+  }
+  50% {
+    opacity: 0.8;
+    filter: blur(1px) contrast(1.2);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0px) contrast(1);
+    transform: scale(1);
+  }
 }
 
 .word-before,
 .word-after {
-  color: #ffffff;
+  color: #2C2421;
+  text-shadow: 0 1px 2px rgba(44, 36, 33, 0.3);
 }
 
+/* ORP - Illuminated Manuscript Drop Cap Style */
 .word-orp {
-  color: #ef4444;
-  font-weight: 700;
+  color: #8B0000;
+  font-weight: 900;
+  font-size: 1.3em;
+  text-shadow:
+    0 0 12px rgba(212, 175, 55, 0.6),
+    0 0 25px rgba(212, 175, 55, 0.3),
+    2px 2px 4px rgba(139, 0, 0, 0.8),
+    0 0 2px #D4AF37;
+  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
+  position: relative;
+  display: inline-block;
+  padding: 0 0.05em;
+}
+
+/* Gold leaf glow effect on ORP */
+.word-orp::before {
+  content: attr(data-letter);
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: #D4AF37;
+  opacity: 0.2;
+  filter: blur(8px);
+  z-index: -1;
 }
 
 .file-name {
@@ -184,106 +410,273 @@ body {
   top: 2rem;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 0.875rem;
-  color: #666;
+  font-size: 0.95rem;
+  color: #8B0000;
   max-width: 80%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-style: italic;
+  font-weight: 600;
+  font-family: 'IM Fell English', serif;
+  letter-spacing: 0.05em;
 }
 
 .wpm-display {
   position: absolute;
   bottom: 2rem;
   right: 2rem;
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #666;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #654321;
   user-select: none;
+  font-family: 'Cinzel', serif;
+  text-shadow: 0 2px 4px rgba(44, 36, 33, 0.3);
+  padding: 0.5rem 1rem;
+  background: rgba(228, 220, 192, 0.6);
+  border-radius: 4px;
+  border: 1px solid rgba(101, 67, 33, 0.3);
 }
 
-/* Controls */
+/* ═══════════════════════════════════════════════════════════════
+   CONTROLS - The Scribe's Toolbox
+   ═══════════════════════════════════════════════════════════════ */
+
 .controls {
-  background: #1a1a1a;
-  border-radius: 16px;
-  padding: 2rem;
-  max-width: 800px;
+  background:
+    linear-gradient(135deg, rgba(244, 235, 208, 0.95) 0%, rgba(228, 220, 192, 0.95) 100%);
+  border-radius: 8px;
+  padding: 2.5rem;
+  max-width: 850px;
   margin: 0 auto;
   width: 100%;
+  box-shadow:
+    0 12px 40px rgba(44, 36, 33, 0.4),
+    inset 0 2px 8px rgba(255, 255, 255, 0.4),
+    inset 0 -2px 8px rgba(44, 36, 33, 0.15);
+  border: 4px double #654321;
+  position: relative;
 }
 
-/* Progress Bar */
+/* Ornamental bookmark tab */
+.controls::before {
+  content: '§';
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 28px;
+  background: linear-gradient(145deg, #8B0000 0%, #6B0000 100%);
+  border-radius: 6px 6px 0 0;
+  box-shadow:
+    0 -4px 10px rgba(139, 0, 0, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #D4AF37;
+  font-size: 1.3rem;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PROGRESS BAR - Ancient Scroll Track
+   ═══════════════════════════════════════════════════════════════ */
+
 .progress-bar-container {
   width: 100%;
-  height: 4px;
-  background: #2a2a2a;
-  border-radius: 2px;
-  overflow: hidden;
-  margin-bottom: 1rem;
+  height: 16px;
+  background:
+    linear-gradient(180deg, rgba(101, 67, 33, 0.3) 0%, rgba(139, 69, 19, 0.15) 100%);
+  border-radius: 8px;
+  overflow: visible;
+  margin-bottom: 1.25rem;
+  border: 2px solid rgba(101, 67, 33, 0.4);
+  box-shadow:
+    inset 0 3px 6px rgba(44, 36, 33, 0.3),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.progress-bar-container:hover {
+  box-shadow:
+    inset 0 3px 6px rgba(44, 36, 33, 0.4),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.3),
+    0 0 0 3px rgba(212, 175, 55, 0.2);
 }
 
 .progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-  transition: width 0.1s ease;
+  background:
+    linear-gradient(90deg,
+      #8B0000 0%,
+      #A52A2A 50%,
+      #CD5C5C 100%
+    );
+  transition: width 0.15s ease-out;
+  border-radius: 6px;
+  box-shadow:
+    0 2px 6px rgba(139, 0, 0, 0.5),
+    inset 0 1px 2px rgba(255, 255, 255, 0.3);
+  position: relative;
 }
 
-/* Word Counter */
+/* Glowing progress indicator */
+.progress-bar::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  background: radial-gradient(circle, #D4AF37 0%, #8B0000 100%);
+  border-radius: 50%;
+  box-shadow:
+    0 0 10px rgba(212, 175, 55, 0.8),
+    0 0 20px rgba(212, 175, 55, 0.4);
+}
+
+/* Progress tooltip - Illuminated Scroll */
+.progress-tooltip {
+  position: absolute;
+  bottom: calc(100% + 20px);
+  left: 0;
+  transform: translateX(-50%);
+  background:
+    linear-gradient(145deg, rgba(44, 36, 33, 0.98) 0%, rgba(65, 50, 45, 0.98) 100%);
+  color: #F4EBD0;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.6),
+    inset 0 1px 2px rgba(212, 175, 55, 0.2),
+    0 0 0 2px rgba(212, 175, 55, 0.3);
+  z-index: 10;
+  font-family: 'IM Fell English', serif;
+  border: 2px solid rgba(139, 0, 0, 0.5);
+}
+
+.progress-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 10px solid transparent;
+  border-top-color: rgba(44, 36, 33, 0.98);
+}
+
+.tooltip-word {
+  font-size: 1.25rem;
+  margin-bottom: 0.35rem;
+  color: #D4AF37;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+  letter-spacing: 0.05em;
+}
+
+.tooltip-position {
+  font-size: 0.8rem;
+  color: rgba(244, 235, 208, 0.8);
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   WORD COUNTER
+   ═══════════════════════════════════════════════════════════════ */
+
 .word-counter {
   text-align: center;
-  font-size: 0.875rem;
-  color: #888;
-  margin-bottom: 1.5rem;
-  font-weight: 500;
+  font-size: 0.95rem;
+  color: #654321;
+  margin-bottom: 1.75rem;
+  font-weight: 600;
+  font-style: italic;
+  font-family: 'IM Fell English', serif;
+  letter-spacing: 0.03em;
 }
 
-/* Control Buttons */
+/* ═══════════════════════════════════════════════════════════════
+   CONTROL BUTTONS - Wax Seal Controls
+   ═══════════════════════════════════════════════════════════════ */
+
 .control-buttons {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
-  margin-bottom: 2rem;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
 }
 
 .control-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #2a2a2a;
-  border: none;
+  background:
+    radial-gradient(circle at 35% 35%, rgba(244, 235, 208, 1) 0%, rgba(228, 220, 192, 1) 100%);
+  border: 3px solid #654321;
   border-radius: 50%;
   cursor: pointer;
-  transition: all 0.2s ease;
-  color: #ffffff;
+  transition: all 0.3s ease;
+  color: #654321;
+  box-shadow:
+    0 6px 12px rgba(44, 36, 33, 0.3),
+    inset 0 -3px 6px rgba(44, 36, 33, 0.15),
+    inset 0 3px 6px rgba(255, 255, 255, 0.5);
 }
 
 .control-btn:hover {
-  background: #333;
-  transform: scale(1.05);
+  transform: translateY(-3px) scale(1.08);
+  box-shadow:
+    0 10px 20px rgba(44, 36, 33, 0.4),
+    inset 0 -3px 6px rgba(44, 36, 33, 0.2),
+    inset 0 3px 6px rgba(255, 255, 255, 0.6);
 }
 
 .control-btn:active {
-  transform: scale(0.95);
+  transform: translateY(-1px) scale(1.03);
 }
 
 .restart-btn {
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
 }
 
+/* Main play/pause - Larger wax seal */
 .play-pause-btn {
-  width: 64px;
-  height: 64px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  width: 72px;
+  height: 72px;
+  background:
+    radial-gradient(circle at 35% 35%, #A52A2A 0%, #8B0000 50%, #6B0000 100%);
+  border-color: #8B0000;
+  color: #F4EBD0;
+  box-shadow:
+    0 8px 20px rgba(139, 0, 0, 0.5),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.5),
+    inset 0 4px 8px rgba(255, 255, 255, 0.2);
 }
 
 .play-pause-btn:hover {
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  background:
+    radial-gradient(circle at 35% 35%, #B53A3A 0%, #9B0000 50%, #7B0000 100%);
+  box-shadow:
+    0 12px 30px rgba(139, 0, 0, 0.6),
+    inset 0 -4px 8px rgba(0, 0, 0, 0.5),
+    inset 0 4px 8px rgba(255, 255, 255, 0.25);
 }
 
-/* Speed Control */
+/* ═══════════════════════════════════════════════════════════════
+   SPEED CONTROL - Quill on Ink Line
+   ═══════════════════════════════════════════════════════════════ */
+
 .speed-control {
   width: 100%;
 }
@@ -291,82 +684,136 @@ body {
 .speed-control label {
   display: block;
   text-align: center;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #ccc;
-  margin-bottom: 1rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #654321;
+  margin-bottom: 1.25rem;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
+/* The ink line */
 .wpm-slider {
   width: 100%;
-  height: 6px;
+  height: 10px;
   -webkit-appearance: none;
   appearance: none;
-  background: #2a2a2a;
-  border-radius: 3px;
+  background:
+    linear-gradient(180deg, rgba(44, 36, 33, 0.4) 0%, rgba(44, 36, 33, 0.2) 100%);
+  border-radius: 5px;
   outline: none;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
+  border: 2px solid rgba(101, 67, 33, 0.4);
+  box-shadow:
+    inset 0 2px 4px rgba(44, 36, 33, 0.4),
+    inset 0 -1px 2px rgba(255, 255, 255, 0.2);
+  position: relative;
 }
 
+/* Quill feather thumb - WebKit */
 .wpm-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 20px;
-  height: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  width: 28px;
+  height: 28px;
+  background:
+    radial-gradient(circle at 30% 30%, #D4AF37 0%, #B8941F 50%, #8B6914 100%);
   border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  cursor: grab;
+  transition: all 0.3s ease;
+  box-shadow:
+    0 4px 12px rgba(139, 0, 0, 0.5),
+    inset 0 2px 4px rgba(255, 255, 255, 0.3),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+    0 0 0 2px rgba(139, 0, 0, 0.3);
+  border: 2px solid #654321;
 }
 
 .wpm-slider::-webkit-slider-thumb:hover {
-  transform: scale(1.2);
+  transform: scale(1.25);
+  box-shadow:
+    0 6px 16px rgba(139, 0, 0, 0.6),
+    inset 0 2px 4px rgba(255, 255, 255, 0.4),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+    0 0 0 3px rgba(212, 175, 55, 0.5);
 }
 
+.wpm-slider::-webkit-slider-thumb:active {
+  cursor: grabbing;
+}
+
+/* Quill feather thumb - Firefox */
 .wpm-slider::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: none;
+  width: 28px;
+  height: 28px;
+  background:
+    radial-gradient(circle at 30% 30%, #D4AF37 0%, #B8941F 50%, #8B6914 100%);
+  border: 2px solid #654321;
   border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  cursor: grab;
+  transition: all 0.3s ease;
+  box-shadow:
+    0 4px 12px rgba(139, 0, 0, 0.5),
+    inset 0 2px 4px rgba(255, 255, 255, 0.3),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+    0 0 0 2px rgba(139, 0, 0, 0.3);
 }
 
 .wpm-slider::-moz-range-thumb:hover {
-  transform: scale(1.2);
+  transform: scale(1.25);
+  box-shadow:
+    0 6px 16px rgba(139, 0, 0, 0.6),
+    inset 0 2px 4px rgba(255, 255, 255, 0.4),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+    0 0 0 3px rgba(212, 175, 55, 0.5);
+}
+
+.wpm-slider::-moz-range-thumb:active {
+  cursor: grabbing;
 }
 
 .speed-markers {
   display: flex;
   justify-content: space-between;
-  font-size: 0.75rem;
-  color: #666;
-  padding: 0 0.25rem;
+  font-size: 0.8rem;
+  color: #8B6914;
+  padding: 0 0.5rem;
+  font-weight: 700;
+  font-family: 'Cinzel', serif;
 }
 
-/* Responsive Design */
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE DESIGN
+   ═══════════════════════════════════════════════════════════════ */
+
 @media (max-width: 768px) {
   .app-title {
-    font-size: 2.5rem;
+    font-size: 3rem;
   }
 
   .app-subtitle {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
 
   .word {
-    font-size: 2.5rem;
+    font-size: 3.5rem;
   }
 
   .wpm-display {
-    font-size: 1rem;
+    font-size: 1.2rem;
     bottom: 1rem;
     right: 1rem;
   }
 
   .controls {
-    padding: 1.5rem;
+    padding: 2rem 1.5rem;
+  }
+
+  .upload-button {
+    width: 150px;
+    height: 150px;
+    font-size: 1rem;
   }
 
   .features {
@@ -374,27 +821,37 @@ body {
   }
 
   .feature {
-    font-size: 0.85rem;
-    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    padding: 0.75rem 1.25rem;
   }
 }
 
 @media (max-width: 480px) {
   .word {
-    font-size: 2rem;
+    font-size: 2.5rem;
   }
 
   .control-buttons {
-    gap: 0.75rem;
+    gap: 1rem;
   }
 
   .play-pause-btn {
-    width: 56px;
-    height: 56px;
+    width: 64px;
+    height: 64px;
   }
 
   .restart-btn {
-    width: 42px;
-    height: 42px;
+    width: 46px;
+    height: 46px;
+  }
+
+  .upload-button {
+    width: 130px;
+    height: 130px;
+    font-size: 0.9rem;
+  }
+
+  .app-title {
+    font-size: 2.5rem;
   }
 }

@@ -94,6 +94,11 @@ const SpeedReader = ({ words, fileName }) => {
     setWpm(newWpm);
   };
 
+  const handleProgressJump = (newIndex) => {
+    setCurrentIndex(newIndex);
+    setIsPlaying(false); // Pause when jumping to allow user to see the word
+  };
+
   const currentWord = words[currentIndex] || '';
   const orpIndex = getORPIndex(currentWord);
   const progress = (currentIndex / words.length) * 100;
@@ -132,6 +137,8 @@ const SpeedReader = ({ words, fileName }) => {
         currentWord={currentIndex + 1}
         totalWords={words.length}
         progress={progress}
+        words={words}
+        onProgressJump={handleProgressJump}
       />
     </div>
   );

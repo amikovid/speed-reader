@@ -1,3 +1,5 @@
+import { useState, useRef } from 'react';
+
 const Controls = ({
   isPlaying,
   onPlayPause,
@@ -7,12 +9,69 @@ const Controls = ({
   currentWord,
   totalWords,
   progress,
+  words,
+  onProgressJump,
 }) => {
+  const [tooltip, setTooltip] = useState({ visible: false, word: '', wordIndex: 0, position: 0 });
+  const progressBarRef = useRef(null);
+
+  const handleProgressClick = (e) => {
+    if (!progressBarRef.current) return;
+
+    const rect = progressBarRef.current.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const percentage = (clickX / rect.width) * 100;
+    const wordIndex = Math.floor((percentage / 100) * totalWords);
+
+    if (onProgressJump) {
+      onProgressJump(Math.max(0, Math.min(wordIndex, totalWords - 1)));
+    }
+  };
+
+  const handleProgressHover = (e) => {
+    if (!progressBarRef.current || !words) return;
+
+    const rect = progressBarRef.current.getBoundingClientRect();
+    const hoverX = e.clientX - rect.left;
+    const percentage = (hoverX / rect.width) * 100;
+    const wordIndex = Math.floor((percentage / 100) * totalWords);
+
+    if (wordIndex >= 0 && wordIndex < words.length) {
+      setTooltip({
+        visible: true,
+        word: words[wordIndex],
+        wordIndex: wordIndex,
+        position: percentage,
+      });
+    }
+  };
+
+  const handleProgressLeave = () => {
+    setTooltip({ visible: false, word: '', wordIndex: 0, position: 0 });
+  };
+
   return (
     <div className="controls">
       {/* Progress Bar */}
-      <div className="progress-bar-container">
+      <div
+        className="progress-bar-container"
+        ref={progressBarRef}
+        onClick={handleProgressClick}
+        onMouseMove={handleProgressHover}
+        onMouseLeave={handleProgressLeave}
+      >
         <div className="progress-bar" style={{ width: `${progress}%` }} />
+        {tooltip.visible && (
+          <div
+            className="progress-tooltip"
+            style={{ left: `${tooltip.position}%` }}
+          >
+            <div className="tooltip-word">{tooltip.word}</div>
+            <div className="tooltip-position">
+              Word {tooltip.wordIndex + 1} of {totalWords}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Word Counter */}
