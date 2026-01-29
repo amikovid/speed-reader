@@ -143,6 +143,144 @@ body {
   margin-bottom: 3rem;
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   INPUT MODE TOGGLE - Manuscript Tabs
+   ═══════════════════════════════════════════════════════════════ */
+
+.input-mode-toggle {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.mode-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #654321;
+  background: rgba(228, 220, 192, 0.7);
+  border: 2px solid rgba(101, 67, 33, 0.3);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Cinzel', 'IM Fell English SC', serif;
+  box-shadow:
+    0 3px 8px rgba(44, 36, 33, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.mode-btn:hover {
+  background: rgba(228, 220, 192, 0.9);
+  border-color: rgba(101, 67, 33, 0.5);
+  transform: translateY(-2px);
+}
+
+.mode-btn.active {
+  background: linear-gradient(145deg, #8B0000 0%, #6B0000 100%);
+  color: #F4EBD0;
+  border-color: #8B0000;
+  box-shadow:
+    0 4px 12px rgba(139, 0, 0, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.15);
+}
+
+.mode-btn.active svg {
+  stroke: #F4EBD0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TEXT INPUT - Parchment Scroll
+   ═══════════════════════════════════════════════════════════════ */
+
+.text-input-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.text-input {
+  width: 100%;
+  min-height: 180px;
+  padding: 1.25rem;
+  font-size: 1rem;
+  font-family: 'IM Fell English', Georgia, serif;
+  color: #2C2421;
+  background: rgba(244, 235, 208, 0.9);
+  border: 3px double #654321;
+  border-radius: 6px;
+  resize: vertical;
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow:
+    inset 0 3px 8px rgba(44, 36, 33, 0.15),
+    0 4px 12px rgba(44, 36, 33, 0.2);
+  line-height: 1.6;
+}
+
+.text-input::placeholder {
+  color: #8B7355;
+  font-style: italic;
+}
+
+.text-input:focus {
+  border-color: #8B0000;
+  box-shadow:
+    inset 0 3px 8px rgba(44, 36, 33, 0.2),
+    0 4px 16px rgba(139, 0, 0, 0.2),
+    0 0 0 3px rgba(139, 0, 0, 0.1);
+}
+
+.start-reading-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #F4EBD0;
+  background: linear-gradient(145deg, #8B0000 0%, #6B0000 100%);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Cinzel', 'IM Fell English SC', serif;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  box-shadow:
+    0 6px 16px rgba(139, 0, 0, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.15),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.start-reading-btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow:
+    0 10px 24px rgba(139, 0, 0, 0.5),
+    inset 0 1px 2px rgba(255, 255, 255, 0.2),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(145deg, #9B0000 0%, #7B0000 100%);
+}
+
+.start-reading-btn:active:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.start-reading-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: linear-gradient(145deg, #654321 0%, #4A3020 100%);
+}
+
 .upload-button {
   display: inline-flex;
   align-items: center;

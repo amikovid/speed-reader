@@ -24,7 +24,7 @@ function App() {
           <div className="welcome-content">
             <h1 className="app-title">Speed Reader</h1>
             <p className="app-subtitle">
-              Upload a PDF and start speed reading with RSVP technology
+              Upload a PDF or paste text to start speed reading with RSVP technology
             </p>
             <PDFUploader onTextExtracted={handleTextExtracted} />
             <div className="features">
